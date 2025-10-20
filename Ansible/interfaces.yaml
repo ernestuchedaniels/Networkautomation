@@ -79,7 +79,7 @@
                 - address: "{{ loopback_ip.split('/')[0] }}"
                   wildcard_bits: "0.0.0.0"
                   area: 0
-          state: merged
+        state: merged
     - name: Apply ACL to WAN interfaces
       cisco.ios.ios_acls:
         config:
