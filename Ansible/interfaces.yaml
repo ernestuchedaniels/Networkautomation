@@ -99,15 +99,13 @@
     - name: Apply ACL to WAN interface (inbound)
       cisco.ios.ios_acls_interfaces:
         config:
-          - name: "{{ item }}"
+          - name: GigabitEthernet0/2
             access_groups:
               - afi: ipv4
                 acls:
                   - name: WAN_ACL
                     direction: in         
         state: merged
-      loop:
-        - GigabitEthernet0/2
     - name: Save configuration
       cisco.ios.ios_config:
         save_when: modified 
