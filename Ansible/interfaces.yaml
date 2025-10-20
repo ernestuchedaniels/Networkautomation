@@ -100,11 +100,11 @@
       cisco.ios.ios_acls_interfaces:
         config:
           - name: "{{ item }}"
+            afi: ipv4
             access_groups:
-              - afi: ipv4
-                acls:
-                  - name: WAN_ACL
-                  - direction: in        
+              - name: WAN_ACL
+                direction: in 
+                       
         state: merged
       loop:
         - GigabitEthernet0/2
