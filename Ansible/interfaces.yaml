@@ -41,12 +41,10 @@
 - name: Layer-3 interfaces
   hosts: routers
   tasks:
-    - name: Configure Layer-3 interfaces
+    - name: Configure L3 IP Addresses
       cisco.ios.ios_l3_interfaces:
-        config:
-          - name: GigabitEthernet0/3
-            ipv4:
-              - address: "{{ gi3addr }}"
+       config: "{{ hostvars[inventory_hostname]['interface_configs'] | from_json }}"
+       state: merged
     - name: Enable Interfaces
       cisco.ios.ios_interfaces:
         config:
@@ -56,6 +54,44 @@
         - { interface_name: 'GigabitEthernet0/1' }
         - { interface_name: 'GigabitEthernet0/2' }
         - { interface_name: 'GigabitEthernet0/3' }  
+    - name: Configure OSPF with loopback as router ID
+      cisco.ios.ios_ospf:
+        config:
+          - process_id: 1
+            router_id: "{{ router_id }}"
+            network:
+              - address: 192.168.1.0
+                wildcard_bits: 0.0.0.255
+                area: 0
+              - address: 10.0.0.0
+                wildcard_bits: 0.0.0.255
+                area: 0
+              - address: "{{ (interface_configs | from_json | selectattr('name', 'equalto', 'Loopback0') | first).ip.split('/')[0] }}"
+                wildcard_bits: 0.0.0.0
+                area: 0
+        state: merged
+    - name: Apply ACL to WAN interfaces
+      cisco.ios.ios_acls:
+        config:
+          - afi: ipv4
+            name: WAN_ACL
+            aces:
+              - sequence: 10
+                action: permit
+                protocol: ip
+                source: any
+                destination: any
+        state: merged
+    - name: Attach ACL to WAN interface (inbound)
+      cisco.ios.ios_interfaces:
+        config:
+          - name: "{{ item }}"
+            ipv4:
+              access_group:
+                in: WAN_ACL
+        state: merged
+      loop:
+        - GigabitEthernet0/2
     - name: Save configuration
       cisco.ios.ios_config:
         save_when: modified 
