@@ -66,13 +66,20 @@
     - name: Configure OSPF with loopback as router ID
       cisco.ios.ios_ospfv2:
         config:
-          - process_id: 1
-            router_id: "{{ loopback_ip.split('/')[0] }}"
-            networks:
-              - { address: "{{ interface_1_ip.split('/')[0] }}", wildcard: "0.0.0.0", area: 0 }
-              - { address: "{{ interface_2_ip.split('/')[0] }}", wildcard: "0.0.0.0", area: 0 }
-              - { address: "{{ loopback_ip.split('/')[0] }}", wildcard: "0.0.0.0", area: 0 }
-        state: merged
+          processes:
+            - process_id: 1
+              router_id: "{{ loopback_ip.split('/')[0] }}"
+              networks:
+                - address: "{{ interface_1_ip.split('/')[0] }}"
+                  wildcard_bits: "0.0.0.0"
+                  area: 0
+                - address: "{{ interface_2_ip.split('/')[0] }}"
+                  wildcard_bits: "0.0.0.0"
+                  area: 0
+                - address: "{{ loopback_ip.split('/')[0] }}"
+                  wildcard_bits: "0.0.0.0"
+                  area: 0
+          state: merged
     - name: Apply ACL to WAN interfaces
       cisco.ios.ios_acls:
         config:
