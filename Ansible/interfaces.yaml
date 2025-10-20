@@ -97,12 +97,14 @@
                       wildcard_bits: 0.0.0.255
         state: merged
     - name: Apply ACL to WAN interface (inbound)
-      cisco.ios.ios_interfaces:
+      cisco.ios.ios_interface_acl:
         config:
           - name: "{{ item }}"
-            ipv4:
-              access_group:
-                in: WAN_ACL
+            access_groups:
+              - afi: ipv4
+                acls:
+                  - name: WAN_ACL
+                  - direction: in        
         state: merged
       loop:
         - GigabitEthernet0/2
