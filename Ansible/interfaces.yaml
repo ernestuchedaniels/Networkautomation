@@ -84,16 +84,17 @@
       cisco.ios.ios_acls:
         config:
           - afi: ipv4
-            name: WAN_ACL
-            aces:
-              - sequence: 10
-                grant: deny
-                protocol: ip
-                source:
-                  any: true
-                destination: 
-                  address: 192.168.1.0
-                  wildcard_bits: 0.0.0.255
+            acls:
+              - name: WAN_ACL
+                aces:
+                  - sequence: 10
+                    grant: deny
+                    protocol: ip
+                    source:
+                      any: true
+                    destination: 
+                      address: 192.168.1.0
+                      wildcard_bits: 0.0.0.255
         state: merged
     - name: Apply ACL to WAN interface (inbound)
       cisco.ios.ios_interfaces:
