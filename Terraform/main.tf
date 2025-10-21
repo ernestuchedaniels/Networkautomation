@@ -16,7 +16,7 @@ resource "iosxe_interface_ethernet" "r2gi2" {
   ipv4_address_mask = "255.255.255.0"
 }
 
-resource "iosxe_interface_ethernet" "r1gi2" {
+resource "iosxe_interface_ethernet" "r1gi1" {
   device            = "iosxe-router-1"
   type              = "GigabitEthernet"
   name              = "1"
@@ -25,7 +25,7 @@ resource "iosxe_interface_ethernet" "r1gi2" {
   ipv4_address_mask = "255.255.255.0"
 }
 
-resource "iosxe_interface_ethernet" "r2gi2" {
+resource "iosxe_interface_ethernet" "r2gi1" {
   device            = "iosxe-router-2"
   type              = "GigabitEthernet"
   name              = "1"
