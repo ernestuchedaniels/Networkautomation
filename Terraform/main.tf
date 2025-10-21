@@ -39,7 +39,7 @@ resource "iosxe_interface_ethernet" "r1lo0" {
   name              = "3"
   shutdown          = false
   ipv4_address      = "10.151.0.1"
-  ipv4_address_mask = "255.255.255.255"
+  ipv4_address_mask = "255.255.255.0"
 }
 
 resource "iosxe_interface_ethernet" "r2lo0" {
@@ -48,7 +48,7 @@ resource "iosxe_interface_ethernet" "r2lo0" {
   name              = "3"
   shutdown          = false
   ipv4_address      = "10.10.0.2"
-  ipv4_address_mask = "255.255.255.255"
+  ipv4_address_mask = "255.255.255.0"
 }
 resource "iosxe_ospf" "ospf1" {
   for_each   = toset(var.routers)
