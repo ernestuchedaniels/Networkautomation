@@ -35,8 +35,8 @@ resource "iosxe_interface_ethernet" "r2gi1" {
 }
 resource "iosxe_interface_ethernet" "r1lo0" {
   device            = "iosxe-router-1"
-  type              = "Loopback"
-  name              = "0"
+  type              = "GigabitEthernet"
+  name              = "3"
   shutdown          = false
   ipv4_address      = "10.151.0.1"
   ipv4_address_mask = "255.255.255.255"
@@ -44,8 +44,8 @@ resource "iosxe_interface_ethernet" "r1lo0" {
 
 resource "iosxe_interface_ethernet" "r2lo0" {
   device            = "iosxe-router-2"
-  type              = "Loopback"
-  name              = "0"
+  type              = "GigabitEthernet"
+  name              = "3"
   shutdown          = false
   ipv4_address      = "10.10.0.2"
   ipv4_address_mask = "255.255.255.255"
