@@ -1,5 +1,5 @@
 username = "admin"
-password = "automation"
+password = "cisco"
 devices = [
   {
     name = "iosxe-router-1"
