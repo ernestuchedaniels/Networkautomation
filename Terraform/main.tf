@@ -33,7 +33,7 @@ resource "iosxe_interface_ethernet" "r2gi1" {
   ipv4_address      = "192.168.1.2"
   ipv4_address_mask = "255.255.255.0"
 }
-resource "iosxe_interface_ethernet" "r1lo0" {
+resource "iosxe_interface_ethernet" "r1gi3" {
   device            = "iosxe-router-1"
   type              = "GigabitEthernet"
   name              = "3"
@@ -42,7 +42,7 @@ resource "iosxe_interface_ethernet" "r1lo0" {
   ipv4_address_mask = "255.255.255.0"
 }
 
-resource "iosxe_interface_ethernet" "r2lo0" {
+resource "iosxe_interface_ethernet" "r2gi3" {
   device            = "iosxe-router-2"
   type              = "GigabitEthernet"
   name              = "3"
@@ -50,6 +50,17 @@ resource "iosxe_interface_ethernet" "r2lo0" {
   ipv4_address      = "10.10.0.2"
   ipv4_address_mask = "255.255.255.0"
 }
+
+resource "iosxe_interface_ethernet" "gi5" {
+  for_each                  = toset(var.routers)
+  device                    = each.key
+  type                      = "GigabitEthernet"
+  name                      = "5"
+  shutdown                  = false
+  ip_access_group_in        = "FROM_WAN"
+  ip_access_group_in_enable = true
+}
+
 resource "iosxe_ospf" "ospf1" {
   for_each   = toset(var.routers)
   device     = each.key
@@ -92,4 +103,28 @@ resource "iosxe_ospf" "ospfnetr2" {
     },
   ]
   depends_on = [iosxe_interface_ethernet.r2lo0]
+}
+
+resource "iosxe_access_list_extended" "wan_in" {
+  for_each = toset(var.routers)
+  device   = each.key
+  name     = "FROM_WAN"
+  entries = [
+    {
+      sequence                = 5
+      ace_rule_action         = "permit"
+      ace_rule_protocol       = "ip"
+      source_any              = true
+      destination_prefix      = "192.168.10.0"
+      destination_prefix_mask = "0.0.0.255"
+    },
+    {
+      sequence          = 10
+      ace_rule_action   = "deny"
+      ace_rule_protocol = "ip"
+      source_any        = true
+      destination_any   = true
+      log               = true
+    }
+  ]
 }
