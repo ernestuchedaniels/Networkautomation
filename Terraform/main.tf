@@ -89,7 +89,7 @@ resource "iosxe_ospf" "ospfnetr1" {
       area     = "0"
     },
   ]
-  depends_on = [iosxe_interface_ethernet.r1lo0]
+  depends_on = [iosxe_interface_ethernet.r1gi3]
 }
 
 resource "iosxe_ospf" "ospfnetr2" {
@@ -102,7 +102,7 @@ resource "iosxe_ospf" "ospfnetr2" {
       area     = "0"
     },
   ]
-  depends_on = [iosxe_interface_ethernet.r2lo0]
+  depends_on = [iosxe_interface_ethernet.r2gi3]
 }
 
 resource "iosxe_access_list_extended" "wan_in" {
