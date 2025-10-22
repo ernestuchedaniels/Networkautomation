@@ -67,11 +67,6 @@ resource "iosxe_ospf" "ospf1" {
   process_id = 1
   networks = [
     {
-      ip       = "192.168.10.0"
-      wildcard = "0.0.0.255"
-      area     = "0"
-    },
-    {
       ip       = "192.168.0.0"
       wildcard = "0.0.0.255"
       area     = "0"
